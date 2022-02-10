@@ -40213,7 +40213,7 @@ function _fetchDocument() {
             if (docUrl instanceof URL) {
               url = docUrl;
             } else {
-              url = new URL(location.origin + path.join(location.pathname, '.' + docUrl));
+              url = new URL(location.origin + path.join(location.pathname, '..' + docUrl));
             }
 
             currentFile = url.pathname.replace(/^\//, '');
@@ -40230,7 +40230,7 @@ function _fetchDocument() {
             }
 
             _context.next = 7;
-            return fetch(docUrl);
+            return fetch(url.toString());
 
           case 7:
             res = _context.sent;

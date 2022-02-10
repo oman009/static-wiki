@@ -34,7 +34,7 @@ async function fetchDocument(docUrl) {
     if (docUrl instanceof URL) {
         url = docUrl;
     } else {
-        url = new URL(location.origin + path.join(location.pathname, '.' + docUrl,));
+        url = new URL(location.origin + path.join(location.pathname, '..' + docUrl,));
     }
 
     currentFile = url.pathname.replace(/^\//, '');
@@ -47,7 +47,7 @@ async function fetchDocument(docUrl) {
     }
 
     if (!cached || cached.time + 30 * 60 * 1000 < new Date().getTime()) {
-        let res = await fetch(docUrl);
+        let res = await fetch(url.toString());
         if (!(res.status >= 200 && res.status < 300)) {
             throw new Error(`Http state ${res.status}`);
         }
