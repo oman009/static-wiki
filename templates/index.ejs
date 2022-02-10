@@ -1,0 +1,154 @@
+
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/fontello.css">
+        <link rel="stylesheet" href="css/styles.css">
+    </head>
+    <body>
+        <div class="nav-header">
+            
+            <nav class="navbar px-2">
+                <a class="navbar-brand" href="/">
+                    <div>StaticWiki</div>
+                </a>
+                <a class="btn btn-outline-success desktop-only" id="create-desktop">
+                    <i class="icon-plus"></i>
+                    新建文档
+                </a>
+
+                <div style="flex-grow: 1;"></div>
+
+                <div class="navbar-nav flex-row desktop-only">
+                    <div class="input-group d-inlineblock">
+                        <input class="form-control" id="search-input">
+                        <button class="btn btn-outline-secondary" id="search-button">
+                            <i class="icon-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                
+                <button class="mobile-only btn btn-outline-secondary" id="extend-button"> 
+                    <i class="icon-dot-3"></i>
+                </button>
+
+            </nav>
+            
+            <ul class="list-unstyled mobile-menu mobile-only" id="menu-list">
+                <li class="list-button" id="create-mobile">
+                    新建文档
+                    <i class="icon-plus float-end"></i> 
+                </li>
+                <li class="list-divider"></li>
+                <li class="list-input">
+                    <input class="form-control" placeholder="搜索" id="input-mobile">
+                </li>
+            </ul>
+        </div>
+        
+        <div id="content">
+            <div class="cover px-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="description animonItem" data-effect="fadeInRight">
+                                <!-- <h4 class="md-5">关于新冠肺炎的资料整理</h4>
+                                这不是阴谋论或者是小说内容，这是对全人类所实施的真实的邪恶。
+                                <br/>
+                                这里所有的消息都是公开并且通过验证的信息，我们把他们整理成了时间线。 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+
+                        <div id="timeline" class="timeline">
+                            <div class="timeline-loading">
+                                <div class="spinner"></div>
+                            </div>
+                            <div class="timeline-body" style="display: none;">
+                                <div class="timeline-header">
+                                    <button id="order-button" class="header-button">
+                                        <i class="icon-down"></i>
+                                    </button>
+    
+                                    时间线
+                                </div>
+                                <div class="timeline-items">
+                                    <!-- <div class="importent-item" data-appear="appear">
+                                        <div class="content">
+                                            <div class="dot"></div>
+                                            <div class="text">
+                                                <span class="time">2012-12-23</span>
+                                                <a class="title" href="javascript:void(0)">时间线 对象1</a>
+                                                详细描述
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-dropdown-item">
+                                        <div class="content">
+                                            <div class="dot">
+                                                <i class="icon-plus"></i>
+                                            </div>
+                                            <div class="timeline-slot-hint">
+                                                <i class="icon-dot-3"></i>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-slots">
+                                            <div class="timeline-item">
+                                                <div class="content">
+                                                    <div class="dot"></div>
+                                                    <span class="time">2012-12-23</span>
+                                                    <a class="title" href="javascript:void(0)">时间线 对象1</a>
+                                                </div>
+                                            </div>
+                                            <div class="timeline-slots-footer">
+                                                <div class="dot">
+                                                    <i class="icon-up-open-mini"></i>
+                                                </div>
+                                                <div class="content">
+                                                    <i class="icon-up-open-mini"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                <div class="timeline-footer">
+                                    <div class="dot">
+                                        <i class="icon-dot-3"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+
+        <div class="footer p-md-5">
+            <div class="container">
+                <h4>关于</h4>
+
+                这是一个通过Github Pages搭建的网站应用。
+                <br/>
+                这是一个完全开放的分布式的网站，你可以新增修改，查询修改记录。
+                <br/>
+                我相信现在的资料还远远不是所有的，欢迎到
+                <a href="https://github.com/<%= config.owner %>/<%= config.repo %>/">Github项目</a>
+                贡献资料或是代码。
+            </div>
+        </div>
+
+        <script src="bundle.js"></script>
+    </body>
+</html>
