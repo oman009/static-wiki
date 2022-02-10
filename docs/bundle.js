@@ -40213,7 +40213,7 @@ function _fetchDocument() {
             if (docUrl instanceof URL) {
               url = docUrl;
             } else {
-              url = new URL(location.origin + docUrl);
+              url = new URL(location.origin + path.join(location.pathname, '.' + docUrl));
             }
 
             currentFile = url.pathname.replace(/^\//, '');
