@@ -497,7 +497,7 @@ async function _setupWiki(element) {
             if (!cached || cached.time + 30 * 60 * 1000 < new Date().getTime()) {
                 loading = true;
                 ProgressBar.progress(0.8);
-                let res = await fetch(docUrl);
+                let res = await fetch(`.${docUrl}`);
                 if (!(res.status >= 200 && res.status < 300)) {
                     throw new Error(`Http state ${res.status}`);
                 }

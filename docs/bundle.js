@@ -41555,7 +41555,7 @@ function _setupWiki2() {
                         loading = true;
                         ProgressBar.progress(0.8);
                         _context3.next = 10;
-                        return fetch(docUrl);
+                        return fetch(".".concat(docUrl));
 
                       case 10:
                         res = _context3.sent;
