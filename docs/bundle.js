@@ -40523,7 +40523,7 @@ var path = require('path');
 
 var MiniSearch = require('minisearch')["default"];
 
-var apiURL = "https://api.github.com/repos/".concat(config.owner, "/").concat(config.repo, "/contents/dist");
+var apiURL = "https://api.github.com/repos/".concat(config.owner, "/").concat(config.repo, "/contents/docs/docs");
 var HistoryKey = 'search_history';
 var historyList = CachedData.get(HistoryKey) || [];
 var dataList = null;

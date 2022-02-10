@@ -4,7 +4,7 @@ const CachedData = require('./cached_data');
 const config = require('../config.json');
 const path = require('path');
 const MiniSearch = require('minisearch').default;
-const apiURL = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/dist`;
+const apiURL = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/docs/docs`;
 
 const HistoryKey = 'search_history';
 
