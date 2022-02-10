@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify index.js -o www/bundle.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-transform-runtime ] ] -t imgurify -g browserify-css -t sassify -p esmify & node ./build.js",
-    "dev": "http-server ./www -p 8000 -c 10"
+    "build": "browserify index.js -o docs/bundle.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-transform-runtime ] ] -t imgurify -g browserify-css -t sassify -p esmify & node ./build.js",
+    "dev": "http-server ./docs -p 8000 -c 10"
   },
   "author": "",
   "license": "ISC",

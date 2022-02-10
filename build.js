@@ -6,7 +6,7 @@ const config = require('./config.json');
 
 async function main() {
     let dir = __dirname + '/templates';
-    let wwwDir = __dirname + '/www';
+    let wwwDir = __dirname + '/docs';
     let files = fs.readdirSync(dir);
     for (f of files) {
         if (f.endsWith('.ejs')) {
