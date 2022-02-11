@@ -153,8 +153,18 @@ class LinkController {
  * 
  * @param {Array<HTMLElement>} elements 
  */
-module.exports = function (elements) {
+ function setupPreview(elements) {
     for (let el of elements) {
         new LinkController(el);
     }
+}
+
+setupPreview.missPreview = function () {
+    if (previewBoard) {
+        let animation = getAnimation(previewBoard);
+        animation.fadeOut();
+        currentActive = null;
+    }
 };
+
+module.exports = setupPreview;

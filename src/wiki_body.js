@@ -9,6 +9,7 @@ const ProgressBar = require('./progress_bar');
 const setupPreview = require('./preview');
 const getAnimation = require('./element_animation');
 const utils = require('./utils');
+const config = require('../config.json');
 
 let wikiElement = document.getElementById('wiki-content');
 let loadingElement = document.querySelector('.wiki-loading');
@@ -168,7 +169,6 @@ async function _setupWiki(element) {
     let createButtons = document.querySelectorAll('#create-desktop, #create-mobile');
     let viewButtons = document.querySelectorAll('#view-desktop, #view-mobile');
     let codeButtons = document.querySelectorAll('#code-desktop, #code-mobile');
-    let historyButtons = document.querySelectorAll('#history-desktop, #history-mobile');
 
     let viewContainer = document.getElementById('view-container');
     let codeContainer = document.getElementById('code-container');
@@ -190,12 +190,12 @@ async function _setupWiki(element) {
     let modeButtons = [
         viewButtons,
         codeButtons,
-        historyButtons
+        // historyButtons
     ];
     let modeContianers = [
         viewContainer,
         codeContainer,
-        historyContainer,
+        // historyContainer,
     ];
     let events = [
         null,
@@ -274,6 +274,7 @@ async function _setupWiki(element) {
             _fadeOut(STATE_LOADING);
             _loadDocument(url);
         }
+        setupPreview.missPreview();
     });
     function processParams(searchParams) {
         let strMode = searchParams.get('mode');
@@ -317,7 +318,7 @@ async function _setupWiki(element) {
     
     setClickEvent(viewButtons, selectFunction(0));
     setClickEvent(codeButtons, selectFunction(1));
-    setClickEvent(historyButtons, selectFunction(2));
+    // setClickEvent(historyButtons, selectFunction(2));
 
     references.splice(0, references.length);
 
@@ -326,7 +327,7 @@ async function _setupWiki(element) {
         throw new Error('No file');
     } 
     let file = hash.replace(/^#!/, '');
-    let parsedPath = path.parse(file);
+    let parsedPath;
 
     let md = MarkdownIt();
     md.renderer.rules.image = function (tokens, idx, options, env, slf) {
@@ -336,7 +337,6 @@ async function _setupWiki(element) {
             for (let attr of token.attrs) {
                 if (attr[0] === 'src') {
                     url = new URL(attr[1]);
-                    console.log(url.searchParams.get('v'));
                     if (url.toString().indexOf('embed') < 0) {
                         url = new URL('https://www.youtube.com/embed/' + url.searchParams.get('v'));
                     }
@@ -446,6 +446,20 @@ async function _setupWiki(element) {
     let wikiRefs = document.getElementById('wiki-refs');
 
     function _renderContent(text, url) {
+        let hash = location.hash;
+        if (hash.length === 0) {
+            throw new Error('No file');
+        } 
+        file = hash.replace(/^#!/, '');
+        parsedPath = path.parse(file);
+
+        let historyButton = document.getElementById('history-desktop');
+        let historyLink = `https://github.com/${config.owner}/${config.repo}/commits/main/docs${file}`;
+        historyButton.setAttribute('href', historyLink);
+
+        let his2Button = document.querySelector('#history-mobile a');
+        his2Button.setAttribute('href', historyLink);
+
         ready = true;
         references.splice(0, references.length);
         headings.splice(0, headings.length);
@@ -486,7 +500,7 @@ async function _setupWiki(element) {
                 url = new URL(location.origin + docUrl);
             }
             currentFile = url.pathname;
-            let cached = CachedData.getWithTime(url.pathname);
+            let cached = CachedData.getWithTime(currentFile);
             let oldText;
             if (cached) {
                 oldText = cached.value;
@@ -497,12 +511,13 @@ async function _setupWiki(element) {
             if (!cached || cached.time + 30 * 60 * 1000 < new Date().getTime()) {
                 loading = true;
                 ProgressBar.progress(0.8);
-                let res = await fetch(`.${docUrl}`);
+                console.log('load ' + currentFile);
+                let res = await fetch(`.${currentFile}`);
                 if (!(res.status >= 200 && res.status < 300)) {
                     throw new Error(`Http state ${res.status}`);
                 }
                 let text = await res.text();
-                CachedData.set(url.pathname, text);
+                CachedData.set(currentFile, text);
                 ProgressBar.complete();
                 
                 if (text !== oldText) {

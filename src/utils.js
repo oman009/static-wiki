@@ -18,7 +18,11 @@ module.exports = {
         const rect = el.getBoundingClientRect();
         return {
             left: rect.left + window.scrollX,
-            top: rect.top + window.scrollY
+            top: rect.top + window.scrollY,
+            width: rect.width,
+            height: rect.height,
+            bottom: rect.top + window.scrollY + rect.height,
+            right: rect.left + window.scrollX + rect.width,
         };
     }
 };

@@ -40377,7 +40377,7 @@ var LinkController = /*#__PURE__*/(0, _createClass2["default"])(function LinkCon
  * @param {Array<HTMLElement>} elements 
  */
 
-module.exports = function (elements) {
+function setupPreview(elements) {
   var _iterator = _createForOfIteratorHelper(elements),
       _step;
 
@@ -40391,7 +40391,17 @@ module.exports = function (elements) {
   } finally {
     _iterator.f();
   }
+}
+
+setupPreview.missPreview = function () {
+  if (previewBoard) {
+    var animation = getAnimation(previewBoard);
+    animation.fadeOut();
+    currentActive = null;
+  }
 };
+
+module.exports = setupPreview;
 
 },{"./cached_data":106,"./element_animation":107,"./utils":115,"@babel/runtime/helpers/asyncToGenerator":4,"@babel/runtime/helpers/classCallCheck":5,"@babel/runtime/helpers/createClass":6,"@babel/runtime/helpers/interopRequireDefault":9,"@babel/runtime/regenerator":13,"markdown-it":28,"markdown-it-plain-text":27,"path":88}],112:[function(require,module,exports){
 "use strict";
@@ -40524,6 +40534,9 @@ var path = require('path');
 var MiniSearch = require('minisearch')["default"];
 
 var apiURL = "https://api.github.com/repos/".concat(config.owner, "/").concat(config.repo, "/contents/docs/docs");
+
+var utils = require('./utils');
+
 var HistoryKey = 'search_history';
 var historyList = CachedData.get(HistoryKey) || [];
 var dataList = null;
@@ -40571,9 +40584,7 @@ function _asyncUpdate2() {
             d = _step6.value;
             p = path.parse(d.name);
 
-            if (!(p.name === 'README'
-            /* || p.ext.toLowerCase() !== '.md'*/
-            )) {
+            if (!(p.name === 'README' || p.ext.toLowerCase() !== '.md')) {
               _context.next = 16;
               break;
             }
@@ -40584,7 +40595,7 @@ function _asyncUpdate2() {
             dataList.push({
               id: dataList.length,
               name: p.name,
-              path: d.path
+              path: d.path.replace(/^docs\//, '')
             });
 
           case 17:
@@ -40703,7 +40714,7 @@ function setupSearch(elements) {
     }
 
     input.onfocus = function (e) {
-      var rect = input.getBoundingClientRect();
+      var rect = utils.getOffset(input);
 
       if (rect.width > 0) {
         container.style.left = "".concat(rect.left, "px");
@@ -40826,7 +40837,7 @@ function setupSearch(elements) {
         path: path
       });
       CachedData.set(HistoryKey, historyList);
-      location.href = '/doc.html#/' + encodeURI(path);
+      location.href = '/doc.html#!/' + encodeURI(path);
       disappearCallback();
     }
   }
@@ -40852,7 +40863,7 @@ if (elements.length > 0) {
   setupSearch(elements);
 }
 
-},{"../config.json":1,"./cached_data":106,"./event_once":108,"@babel/runtime/helpers/asyncToGenerator":4,"@babel/runtime/helpers/interopRequireDefault":9,"@babel/runtime/regenerator":13,"minisearch":86,"path":88}],114:[function(require,module,exports){
+},{"../config.json":1,"./cached_data":106,"./event_once":108,"./utils":115,"@babel/runtime/helpers/asyncToGenerator":4,"@babel/runtime/helpers/interopRequireDefault":9,"@babel/runtime/regenerator":13,"minisearch":86,"path":88}],114:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -41214,7 +41225,11 @@ module.exports = {
     var rect = el.getBoundingClientRect();
     return {
       left: rect.left + window.scrollX,
-      top: rect.top + window.scrollY
+      top: rect.top + window.scrollY,
+      width: rect.width,
+      height: rect.height,
+      bottom: rect.top + window.scrollY + rect.height,
+      right: rect.left + window.scrollX + rect.width
     };
   }
 };
@@ -41257,6 +41272,8 @@ var setupPreview = require('./preview');
 var getAnimation = require('./element_animation');
 
 var utils = require('./utils');
+
+var config = require('../config.json');
 
 var wikiElement = document.getElementById('wiki-content');
 var loadingElement = document.querySelector('.wiki-loading');
@@ -41515,7 +41532,7 @@ function _setupWiki(_x3) {
 
 function _setupWiki2() {
   _setupWiki2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(element) {
-    var createButtons, viewButtons, codeButtons, historyButtons, viewContainer, codeContainer, historyContainer, menuList, menuRefs, code, codeMirror, modeButtons, modeContianers, events, STATE_LOADING, STATE_SUCCESS, STATE_ERROR, _state, _fadeOut, selectedMode, loading, currentFile, ready, setSelectMode, processParams, selectFunction, hash, file, parsedPath, md, findReference, currentHeading, docTitle, docContent, wikiRefs, _renderContent, _loadDocument, _loadDocument2;
+    var createButtons, viewButtons, codeButtons, viewContainer, codeContainer, historyContainer, menuList, menuRefs, code, codeMirror, modeButtons, modeContianers, events, STATE_LOADING, STATE_SUCCESS, STATE_ERROR, _state, _fadeOut, selectedMode, loading, currentFile, ready, setSelectMode, processParams, selectFunction, hash, file, parsedPath, md, findReference, currentHeading, docTitle, docContent, wikiRefs, _renderContent, _loadDocument, _loadDocument2;
 
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) {
@@ -41537,7 +41554,7 @@ function _setupWiki2() {
                         }
 
                         currentFile = url.pathname;
-                        cached = CachedData.getWithTime(url.pathname);
+                        cached = CachedData.getWithTime(currentFile);
 
                         if (cached) {
                           oldText = cached.value;
@@ -41548,32 +41565,33 @@ function _setupWiki2() {
                         }
 
                         if (!(!cached || cached.time + 30 * 60 * 1000 < new Date().getTime())) {
-                          _context3.next = 20;
+                          _context3.next = 21;
                           break;
                         }
 
                         loading = true;
                         ProgressBar.progress(0.8);
-                        _context3.next = 10;
-                        return fetch(".".concat(docUrl));
+                        console.log('load ' + currentFile);
+                        _context3.next = 11;
+                        return fetch(".".concat(currentFile));
 
-                      case 10:
+                      case 11:
                         res = _context3.sent;
 
                         if (res.status >= 200 && res.status < 300) {
-                          _context3.next = 13;
+                          _context3.next = 14;
                           break;
                         }
 
                         throw new Error("Http state ".concat(res.status));
 
-                      case 13:
-                        _context3.next = 15;
+                      case 14:
+                        _context3.next = 16;
                         return res.text();
 
-                      case 15:
+                      case 16:
                         text = _context3.sent;
-                        CachedData.set(url.pathname, text);
+                        CachedData.set(currentFile, text);
                         ProgressBar.complete();
 
                         if (text !== oldText) {
@@ -41586,12 +41604,12 @@ function _setupWiki2() {
 
                         loading = false;
 
-                      case 20:
-                        _context3.next = 28;
+                      case 21:
+                        _context3.next = 29;
                         break;
 
-                      case 22:
-                        _context3.prev = 22;
+                      case 23:
+                        _context3.prev = 23;
                         _context3.t0 = _context3["catch"](0);
                         console.log(_context3.t0);
                         ProgressBar.error();
@@ -41600,12 +41618,12 @@ function _setupWiki2() {
 
                         loading = false;
 
-                      case 28:
+                      case 29:
                       case "end":
                         return _context3.stop();
                     }
                   }
-                }, _callee3, null, [[0, 22]]);
+                }, _callee3, null, [[0, 23]]);
               }));
               return _loadDocument2.apply(this, arguments);
             };
@@ -41615,6 +41633,19 @@ function _setupWiki2() {
             };
 
             _renderContent = function _renderContent2(text, url) {
+              var hash = location.hash;
+
+              if (hash.length === 0) {
+                throw new Error('No file');
+              }
+
+              file = hash.replace(/^#!/, '');
+              parsedPath = path.parse(file);
+              var historyButton = document.getElementById('history-desktop');
+              var historyLink = "https://github.com/".concat(config.owner, "/").concat(config.repo, "/commits/main/docs").concat(file);
+              historyButton.setAttribute('href', historyLink);
+              var his2Button = document.querySelector('#history-mobile a');
+              his2Button.setAttribute('href', historyLink);
               ready = true;
               references.splice(0, references.length);
               headings.splice(0, headings.length);
@@ -41826,7 +41857,6 @@ function _setupWiki2() {
             createButtons = document.querySelectorAll('#create-desktop, #create-mobile');
             viewButtons = document.querySelectorAll('#view-desktop, #view-mobile');
             codeButtons = document.querySelectorAll('#code-desktop, #code-mobile');
-            historyButtons = document.querySelectorAll('#history-desktop, #history-mobile');
             viewContainer = document.getElementById('view-container');
             codeContainer = document.getElementById('code-container');
             historyContainer = document.getElementById('history-container');
@@ -41840,8 +41870,10 @@ function _setupWiki2() {
               lineWrapping: true,
               theme: 'paraiso-light'
             });
-            modeButtons = [viewButtons, codeButtons, historyButtons];
-            modeContianers = [viewContainer, codeContainer, historyContainer];
+            modeButtons = [viewButtons, codeButtons // historyButtons
+            ];
+            modeContianers = [viewContainer, codeContainer // historyContainer,
+            ];
             events = [null, function () {
               setTimeout(function () {
                 codeMirror.refresh();
@@ -41866,23 +41898,24 @@ function _setupWiki2() {
 
                 _loadDocument(url);
               }
+
+              setupPreview.missPreview();
             });
             setClickEvent(viewButtons, selectFunction(0));
-            setClickEvent(codeButtons, selectFunction(1));
-            setClickEvent(historyButtons, selectFunction(2));
+            setClickEvent(codeButtons, selectFunction(1)); // setClickEvent(historyButtons, selectFunction(2));
+
             references.splice(0, references.length);
             hash = location.hash;
 
             if (!(hash.length === 0)) {
-              _context4.next = 39;
+              _context4.next = 37;
               break;
             }
 
             throw new Error('No file');
 
-          case 39:
+          case 37:
             file = hash.replace(/^#!/, '');
-            parsedPath = path.parse(file);
             md = MarkdownIt();
 
             md.renderer.rules.image = function (tokens, idx, options, env, slf) {
@@ -41900,7 +41933,6 @@ function _setupWiki2() {
 
                     if (attr[0] === 'src') {
                       url = new URL(attr[1]);
-                      console.log(url.searchParams.get('v'));
 
                       if (url.toString().indexOf('embed') < 0) {
                         url = new URL('https://www.youtube.com/embed/' + url.searchParams.get('v'));
@@ -42028,7 +42060,7 @@ function _setupWiki2() {
 
             _loadDocument(file);
 
-          case 49:
+          case 46:
           case "end":
             return _context4.stop();
         }
@@ -42042,4 +42074,4 @@ if (wikiElement) {
   _setupWiki(wikiElement);
 }
 
-},{"./cached_data":106,"./element_animation":107,"./preview":111,"./progress_bar":112,"./utils":115,"@babel/runtime/helpers/asyncToGenerator":4,"@babel/runtime/helpers/classCallCheck":5,"@babel/runtime/helpers/createClass":6,"@babel/runtime/helpers/interopRequireDefault":9,"@babel/runtime/regenerator":13,"animated-scroll-to":14,"codemirror":19,"codemirror/lib/codemirror.css":18,"codemirror/mode/markdown/markdown":20,"codemirror/theme/paraiso-light.css":23,"markdown-it":28,"path":88}]},{},[2]);
+},{"../config.json":1,"./cached_data":106,"./element_animation":107,"./preview":111,"./progress_bar":112,"./utils":115,"@babel/runtime/helpers/asyncToGenerator":4,"@babel/runtime/helpers/classCallCheck":5,"@babel/runtime/helpers/createClass":6,"@babel/runtime/helpers/interopRequireDefault":9,"@babel/runtime/regenerator":13,"animated-scroll-to":14,"codemirror":19,"codemirror/lib/codemirror.css":18,"codemirror/mode/markdown/markdown":20,"codemirror/theme/paraiso-light.css":23,"markdown-it":28,"path":88}]},{},[2]);

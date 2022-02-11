@@ -5,6 +5,7 @@ const config = require('../config.json');
 const path = require('path');
 const MiniSearch = require('minisearch').default;
 const apiURL = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/docs/docs`;
+const utils = require('./utils');
 
 const HistoryKey = 'search_history';
 
@@ -19,13 +20,13 @@ async function asyncUpdate() {
         dataList = [];
         for (let d of json) {
             let p = path.parse(d.name);
-            if (p.name === 'README'/* || p.ext.toLowerCase() !== '.md'*/) {
+            if (p.name === 'README' || p.ext.toLowerCase() !== '.md') {
                 continue;
             }
             dataList.push({
                 id: dataList.length,
                 name: p.name,
-                path: d.path,
+                path: d.path.replace(/^docs\//, ''),
             });
         }
         CachedData.set(apiURL, dataList);
@@ -104,7 +105,7 @@ function setupSearch(elements) {
         }
 
         input.onfocus = function (e) {
-            let rect = input.getBoundingClientRect();
+            let rect = utils.getOffset(input);
             if (rect.width > 0) {
                 container.style.left = `${rect.left}px`;
                 container.style.top = `${rect.bottom + 4}px`;
@@ -189,7 +190,7 @@ function setupSearch(elements) {
                 path
             });
             CachedData.set(HistoryKey, historyList);
-            location.href = '/doc.html#/' + encodeURI(path);
+            location.href = '/doc.html#!/' + encodeURI(path);
             disappearCallback();
         }
     }
