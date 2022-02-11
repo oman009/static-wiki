@@ -444,6 +444,9 @@ async function _setupWiki(element) {
     let docTitle = document.getElementById('doc-title');
     let docContent = document.getElementById('doc-content');
     let wikiRefs = document.getElementById('wiki-refs');
+    let codeTitle = document.getElementById('code-title');
+    let historyButton = document.getElementById('history-desktop');
+    let his2Button = document.querySelector('#history-mobile a');
 
     function _renderContent(text, url) {
         let hash = location.hash;
@@ -453,11 +456,9 @@ async function _setupWiki(element) {
         file = hash.replace(/^#!/, '');
         parsedPath = path.parse(file);
 
-        let historyButton = document.getElementById('history-desktop');
         let historyLink = `https://github.com/${config.owner}/${config.repo}/commits/main/docs${file}`;
         historyButton.setAttribute('href', historyLink);
 
-        let his2Button = document.querySelector('#history-mobile a');
         his2Button.setAttribute('href', historyLink);
 
         ready = true;
@@ -471,6 +472,7 @@ async function _setupWiki(element) {
         }));
         let title = decodeURI(parsedPath.name);
         docTitle.innerText = title;
+        codeTitle.innerText = `${title}.md`;
         docContent.innerHTML = strText;
         wikiRefs.innerHTML = '';
         for (let i = 0, t = references.length; i < t; ++i) {

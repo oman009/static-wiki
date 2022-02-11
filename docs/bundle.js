@@ -41532,7 +41532,7 @@ function _setupWiki(_x3) {
 
 function _setupWiki2() {
   _setupWiki2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(element) {
-    var createButtons, viewButtons, codeButtons, viewContainer, codeContainer, historyContainer, menuList, menuRefs, code, codeMirror, modeButtons, modeContianers, events, STATE_LOADING, STATE_SUCCESS, STATE_ERROR, _state, _fadeOut, selectedMode, loading, currentFile, ready, setSelectMode, processParams, selectFunction, hash, file, parsedPath, md, findReference, currentHeading, docTitle, docContent, wikiRefs, _renderContent, _loadDocument, _loadDocument2;
+    var createButtons, viewButtons, codeButtons, viewContainer, codeContainer, historyContainer, menuList, menuRefs, code, codeMirror, modeButtons, modeContianers, events, STATE_LOADING, STATE_SUCCESS, STATE_ERROR, _state, _fadeOut, selectedMode, loading, currentFile, ready, setSelectMode, processParams, selectFunction, hash, file, parsedPath, md, findReference, currentHeading, docTitle, docContent, wikiRefs, codeTitle, historyButton, his2Button, _renderContent, _loadDocument, _loadDocument2;
 
     return _regenerator["default"].wrap(function _callee4$(_context4) {
       while (1) {
@@ -41641,10 +41641,8 @@ function _setupWiki2() {
 
               file = hash.replace(/^#!/, '');
               parsedPath = path.parse(file);
-              var historyButton = document.getElementById('history-desktop');
               var historyLink = "https://github.com/".concat(config.owner, "/").concat(config.repo, "/commits/main/docs").concat(file);
               historyButton.setAttribute('href', historyLink);
-              var his2Button = document.querySelector('#history-mobile a');
               his2Button.setAttribute('href', historyLink);
               ready = true;
               references.splice(0, references.length);
@@ -41657,6 +41655,7 @@ function _setupWiki2() {
               }));
               var title = decodeURI(parsedPath.name);
               docTitle.innerText = title;
+              codeTitle.innerText = "".concat(title, ".md");
               docContent.innerHTML = strText;
               wikiRefs.innerHTML = '';
 
@@ -42057,10 +42056,13 @@ function _setupWiki2() {
             docTitle = document.getElementById('doc-title');
             docContent = document.getElementById('doc-content');
             wikiRefs = document.getElementById('wiki-refs');
+            codeTitle = document.getElementById('code-title');
+            historyButton = document.getElementById('history-desktop');
+            his2Button = document.querySelector('#history-mobile a');
 
             _loadDocument(file);
 
-          case 46:
+          case 49:
           case "end":
             return _context4.stop();
         }
