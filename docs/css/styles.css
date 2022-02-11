@@ -59,7 +59,7 @@ a {
 
 .timeline {
     position: relative;
-    min-height: 360px;
+    min-height: 76vh;
 }
 
 .timeline .importent-item {
