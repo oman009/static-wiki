@@ -156,6 +156,27 @@ window.jumpToHeading = async function (id) {
     }
 };
 
+let hintContainer = document.getElementById('hint-container');
+let opened = false;
+window.showHint = function () {
+    if (!opened) {
+        opened = true;
+        getAnimation(hintContainer).dropDown();
+    }
+};
+
+let closeHint = document.getElementById('close-hint');
+closeHint.onclick = function () {
+    if (opened) {
+        opened = false;
+        getAnimation(hintContainer).dropUp({
+            onComplete() {
+                hintContainer.style.display = 'none';
+            }
+        });
+    }
+};
+
 function setClickEvent(buttons, fn) {
     for (let btn of buttons) {
         btn.onclick = fn;
@@ -345,6 +366,14 @@ async function _setupWiki(element) {
             return `<iframe class="inner-video" src="${url.toString()}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>`+
             `</iframe>`;
         } else {
+            for (let attr of token.attrs) {
+                if (attr[0] === 'src') {
+                    let src = attr[1];
+                    if (!src.match(/^https?:\/\//)) {
+                        attr[1] = path.normalize('/docs/' + src);
+                    }
+                }
+            }
             return slf.renderToken(tokens, idx, options);
         }
     };
@@ -447,6 +476,8 @@ async function _setupWiki(element) {
     let codeTitle = document.getElementById('code-title');
     let historyButton = document.getElementById('history-desktop');
     let his2Button = document.querySelector('#history-mobile a');
+    let editButton = document.getElementById('edit-button');
+    let titleElement = document.querySelector('title');
 
     function _renderContent(text, url) {
         let hash = location.hash;
@@ -461,6 +492,8 @@ async function _setupWiki(element) {
 
         his2Button.setAttribute('href', historyLink);
 
+        editButton.setAttribute('href', `https://github.com/${config.owner}/${config.repo}/edit/main/docs${file}`);
+
         ready = true;
         references.splice(0, references.length);
         headings.splice(0, headings.length);
@@ -471,6 +504,7 @@ async function _setupWiki(element) {
             id: 'refs-heading',
         }));
         let title = decodeURI(parsedPath.name);
+        titleElement.innerText = title;
         docTitle.innerText = title;
         codeTitle.innerText = `${title}.md`;
         docContent.innerHTML = strText;

@@ -13,6 +13,8 @@
                 height: 100%;
             }
         </style>
+
+        <title>StaticWiki Document</title>
     </head>
     <body>
         <div class="wiki-body">
@@ -22,7 +24,7 @@
                     <a class="navbar-brand" href="./">
                         <div>StaticWiki</div>
                     </a>
-                    <a class="btn btn-outline-success desktop-only" id="create-desktop" href="https://github.com/oman009/static-wiki/tree/main/docs/docs#readme">
+                    <a class="btn btn-outline-success desktop-only" id="create-desktop" title="新建文档" href="https://github.com/oman009/static-wiki/tree/main/docs/docs#readme">
                         <i class="icon-plus"></i>
                         新建文档
                     </a>
@@ -31,13 +33,13 @@
     
                     <div class="navbar-nav flex-row desktop-only">
                         <div class="btn-group mx-1">
-                            <button class="btn btn-outline-secondary" id="view-desktop">
+                            <button class="btn btn-outline-secondary" id="view-desktop" title="查看文档">
                                 <i class="icon-book-open"></i>
                             </button>
-                            <button class="btn btn-outline-secondary" id="code-desktop">
+                            <button class="btn btn-outline-secondary" id="code-desktop" title="文档源码">
                                 <i class="icon-code"></i>
                             </button>
-                            <a class="btn btn-outline-secondary" id="history-desktop" target="_blank">
+                            <a class="btn btn-outline-secondary" id="history-desktop" target="_blank" title="更新历史">
                                 <i class="icon-flow-tree"></i>
                             </a>
                         </div>
@@ -116,11 +118,55 @@
                         <a href="https://docs.github.com/cn/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">Markdown</a>
                         格式</span>
                     <div id="code" class="code"></div>
-                    <span class="hint">在编辑文档请看一眼
-                        <a href="javascript:void(0)">操作手册</a>
+                    <span class="hint">在编辑文档请看一下
+                        <a href="javascript:showHint()">操作手册</a>
                     </span>
+                    <div class="hint-container" id="hint-container">
+                        <button class="close" id="close-hint">
+                            <i class="icon-up-open-mini"></i>
+                        </button>
+
+                        除了基础的
+                        <a href="https://docs.github.com/cn/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax">Markdown</a>
+                        格式之外的额外扩展：
+                        <p>
+                            <h4>外部引用</h4>
+                            基于链接的扩展
+                            <code>
+                                [ref:引用说明](https://link.com/#@https://backup.com/)
+                            </code>
+                            <br/>
+                            如果链接的文本内容是由<code>ref:</code>开头的话，这个链接就会被识别为外部引用。
+                            并且如果这个引用有多个链接，比如：包括备份链接的话。可以使用<b>#@</b>
+                            来分割多个链接。
+
+                            <br/>
+                            文档中引用会用编号的形式展示<img src="res/ref_inline.png" alt="引用编号">，然后具体内容会出现在引用列表中。
+                            
+                            <br/>
+                            <img src="res/ref_list.png" alt="引用列表">
+                        </p>
+                        <p>
+                            <h4>视频嵌入</h4>
+                            基于图片插入的扩展
+                            <code>![video:视频标题](https://www.youtube.com/watch?v=CXltZMgKRxs)</code>
+                            
+                            <br/>
+                            如果一个插入图片的文本内容是由<code>video:</code>开头的话，它就会被识别为一个插入视频。
+                            <br/>
+                            如果是Youtube视频的话会识别视频ID并转换成嵌入链接，如果是其他网站请填入嵌入链接。
+                            <br/>
+                            <img src="res/video_embed.png" alt="视频嵌入"/>
+                        </p>
+
+                        <p>
+                            关于修改文档操作流程可以查看
+                            <a href="https://github.com/oman009/static-wiki/blob/main/docs/docs/README.md" title="操作文档" target="_blank">操作文档</a>。
+                        </p>
+
+                    </div>
                     <div class="code-buttons">
-                        <a class="btn btn-success">编辑文档</a>
+                        <a class="btn btn-success" id="edit-button" title="编辑文档">编辑文档</a>
                     </div>
                 </div>
                 <div id="history-container" style="display: none;"></div>

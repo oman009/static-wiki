@@ -866,3 +866,32 @@ a {
     color: inherit;
     text-decoration: inherit;
 }
+
+.hint-container {
+    border-radius: 8px;
+    border: #6c757d 1px solid;
+    font-size: 12px;
+    padding: 6px;
+    overflow: hidden;
+    height: 0;
+    display: none;
+    position: relative;
+}
+
+.hint-container img {
+    border: #a9acaf 1px solid;
+    max-width: 100%;
+}
+
+.hint-container h4 {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.hint-container .close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: none;
+    background: transparent;
+}
