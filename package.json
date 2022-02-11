@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify index.js -o docs/bundle.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-transform-runtime ] ] -t imgurify -g browserify-css -t sassify -p esmify & node ./build.js",
+    "build": "browserify index.js -o docs/bundle.js -t [ babelify --presets [ @babel/preset-env ] --plugins [ @babel/plugin-transform-runtime ] ] -t imgurify -g browserify-css -t sassify -p esmify -g uglifyify & node ./build.js",
     "dev": "http-server ./docs -p 8000 -c 10"
   },
   "author": "",
@@ -23,7 +23,9 @@
     "http-server": "^14.1.0",
     "imgurify": "^2.0.1",
     "js-cookie": "^3.0.1",
-    "sassify": "^4.0.1"
+    "minifyify": "^7.3.5",
+    "sassify": "^4.0.1",
+    "uglifyify": "^5.0.2"
   },
   "dependencies": {
     "animated-scroll-to": "^2.2.0",
