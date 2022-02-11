@@ -4,7 +4,7 @@
 
 ## 如何新建文档
 
-1. 点击[文档目录](https://github.com/oman009/static-wiki/tree/main/docs/docs)界面的右上角的`Add file`按钮*（需要先登录Github）*。点击之后出现的`Create new file`(新建文件)。![Create new file](../pics/create_file.png)
+1. 点击[文档目录](https://github.com/oman009/static-wiki/tree/main/docs/docs)界面的右上角的`Add file`按钮 (*需要先登录Github*)。点击之后出现的`Create new file`(新建文件)。![Create new file](../pics/create_file.png)
 2. 在随后出现的新建文件页面中可以填写文件名和和内容，也可以实时预览编写的内容。注意：文件的后缀名必须是`md`而且需要用标题做文件名。
 3. 编写玩内容后需要填写一些说明，用于简单说明其内容，会显示到更新日志中方便查看。然后就可以点击`Commit new file`按钮了。
 
@@ -18,6 +18,6 @@
 
 ## 如何修改文档
 
-1. 点击对应文档的内容页面中的右上角铅笔✏图标*（需要先登录Github）*。![Edit File](../pics/edit_file.png)
+1. 点击对应文档的内容页面中的右上角铅笔✏图标 (*需要先登录Github*)。![Edit File](../pics/edit_file.png)
 2. 随后流程与新建文件流程一致。
 
