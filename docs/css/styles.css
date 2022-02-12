@@ -85,7 +85,7 @@ a {
     left: 0;
     width: 0%;
     height: 1px;
-    background: black;
+    border-top: black 1px solid;
     transition: width 600ms ease-out;
 }
 
@@ -307,7 +307,7 @@ a {
     width: 0%;
     left: 0px;
     top: -1px;
-    background: black;
+    border-top: black 1px solid;
     transition: width 600ms;
 }
 
