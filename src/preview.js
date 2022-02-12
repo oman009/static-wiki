@@ -162,7 +162,11 @@ class LinkController {
 setupPreview.missPreview = function () {
     if (previewBoard) {
         let animation = getAnimation(previewBoard);
-        animation.fadeOut();
+        animation.fadeOut({
+            onComplete() {
+                previewBoard.style.display = 'none';
+            }
+        });
         currentActive = null;
     }
 };

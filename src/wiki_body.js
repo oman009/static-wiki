@@ -285,7 +285,7 @@ async function _setupWiki(element) {
         }
     }
 
-    window.addEventListener('hashchange', function(e) {
+    window.addEventListener('hashchange', async function(e) {
         let fullUrl = new URL(e.newURL);
         let hash = fullUrl.hash.replace(/^#!/, '');
         let url = new URL(location.origin + hash);
@@ -293,6 +293,13 @@ async function _setupWiki(element) {
             processParams(url.searchParams);
         } else {
             _fadeOut(STATE_LOADING);
+            await scrolTo(0, {
+                maxDuration: 300,
+                easing(t) {
+                    return t
+                },
+                speed: 300
+            });
             _loadDocument(url);
         }
         setupPreview.missPreview();

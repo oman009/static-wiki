@@ -170,6 +170,7 @@ function setupSearch(elements) {
                 li.dataset['path'] = d.path;
                 li.title = d.name;
                 li.onclick = searchItemClicked;
+
                 list.appendChild(li);
             }
         }
