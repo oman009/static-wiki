@@ -377,7 +377,7 @@ async function _setupWiki(element) {
                 if (attr[0] === 'src') {
                     let src = attr[1];
                     if (!src.match(/^https?:\/\//)) {
-                        attr[1] = path.normalize('/docs/' + src);
+                        attr[1] = path.normalize('./docs/' + src);
                     }
                 }
             }
