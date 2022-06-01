@@ -166,16 +166,18 @@ window.showHint = function () {
 };
 
 let closeHint = document.getElementById('close-hint');
-closeHint.onclick = function () {
-    if (opened) {
-        opened = false;
-        getAnimation(hintContainer).dropUp({
-            onComplete() {
-                hintContainer.style.display = 'none';
-            }
-        });
-    }
-};
+if (closeHint) {
+    closeHint.onclick = function () {
+        if (opened) {
+            opened = false;
+            getAnimation(hintContainer).dropUp({
+                onComplete() {
+                    hintContainer.style.display = 'none';
+                }
+            });
+        }
+    };
+}
 
 function setClickEvent(buttons, fn) {
     for (let btn of buttons) {
